@@ -83,6 +83,10 @@ public class ProductsController {
     @RequestMapping("/products/{product}/tag/add")
     public String addTagToProduct(@PathVariable String product,
                                   @RequestParam String tag) {
+        if (!productInfoRepository.existsByName(product)) {
+            return "Product not found";
+        }
+
         ProductInfo productInfo = productInfoRepository.findByName(product);
         Tag tagInDB;
 
@@ -93,17 +97,24 @@ public class ProductsController {
             tagInDB = tagRepository.findByName(tag);
         }
 
-        productInfo.getTags().add(tagInDB);
-        tagInDB.getProductInfo().add(productInfo);
+        if (!productInfoRepository.findByName(product).getTags().contains(tagInDB)) {
 
-        tagRepository.save(tagInDB);
-        productInfoRepository.save(productInfo);
+            productInfo.getTags().add(tagInDB);
+            tagInDB.getProductInfo().add(productInfo);
 
-        return "Tag added";
+            tagRepository.save(tagInDB);
+            productInfoRepository.save(productInfo);
+            return "Tag added";
+        } else {
+            return "Tag not added";
+        }
+
+
+
     }
 
     @ResponseBody
-    @RequestMapping("/tag/{tag}/products/get")
+    @RequestMapping("/tags/{tag}/products")
     public String getProductsByTag(@PathVariable String tag) {
         Tag tagInDB;
         if (tagRepository.existsByName(tag)) {

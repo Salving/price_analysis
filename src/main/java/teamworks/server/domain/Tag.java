@@ -20,7 +20,7 @@ public class Tag {
 
     @JsonIgnore
     @ManyToMany(targetEntity = ProductInfo.class,fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_info_id", nullable = false)
+    @JoinColumn(name = "product_info_id")
     private List<ProductInfo> productInfo;
 
     protected Tag() {

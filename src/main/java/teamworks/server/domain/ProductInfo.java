@@ -26,7 +26,8 @@ public class ProductInfo {
     private List<Product> products;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "productInfo")
+    @ManyToMany(targetEntity = Tag.class/*, mappedBy = "productInfo"*/)
+//    @JoinColumn(name = "tag_id")
     private List<Tag> tags;
 
     protected ProductInfo() {
